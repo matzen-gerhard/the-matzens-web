@@ -140,7 +140,7 @@ Now test that running the react web page can connect to the local azure function
 
 Now you can publish the initial setup. This implies that the code is already checked into your github account.
 
-1. Install the extension "Azure Static Web Apps" 
+1. Install the extension [Azure Static Web Apps](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestaticwebapps)
    - This extension will allow you to publish your azure functions and React website at the same time.
 
 2. Click on the "A" icon for the Azure extension on the left toolbar.
