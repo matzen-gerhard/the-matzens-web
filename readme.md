@@ -2,6 +2,8 @@
 
 This project started as a project for me to learn React / Typescript, while providing a portfolio website for my son as well. During an interview, I was asked if I had ever used Azure functions.  At the time, I had not. Then, over the next 4 days, I realized that Azure Functions are the way to go for static web applications hosted in Azure, at least for the free tier.
 
+This is a work in progress, but if you want to follow the end result along, you can vist the site [here](https://yellow-sea-00062301e.1.azurestaticapps.net/).
+
 - Frontend: React + TypeScript (vite)
 - Backend/API: Azure functions + C#
 - Hosted in Azure: Static Web APP
