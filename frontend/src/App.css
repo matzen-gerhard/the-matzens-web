@@ -1,0 +1,10 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
