@@ -62,7 +62,7 @@ netstat -aon | findstr :7051
 ## Initial setup
 These steps can be done with the Azure CLI.
 
-- Create resource group
+- Create resource group 
 - Create storage account
   - Configure CORS (temporary, during dev)
      - Settings > Resource Sharing (CORS)
