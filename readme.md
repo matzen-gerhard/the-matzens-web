@@ -62,7 +62,8 @@ netstat -aon | findstr :7051
 ## Initial setup
 These steps can be done with the Azure CLI.
 
-- Create resource group 
+- Create resource group (West US 2)
+  - Currently Azrue Functions cannot be created in West US, so use West US2.
 - Create storage account
   - Configure CORS (temporary, during dev)
      - Settings > Resource Sharing (CORS)
@@ -136,6 +137,42 @@ Now test that running the react web page can connect to the local azure function
 ## Publish initial setup
 
 Now you can publish the initial setup. This implies that the code is already checked into your github account.
+
+1. Install the extension "Azure Static Web Apps" 
+   - This extension will allow you to publish your azure functions and React website at the same time.
+
+2. Click on the "A" icon for the Azure extension on the left toolbar.
+   - If you are connected to your Azure subscription, you will see a resource list tree view appear.
+   - Browse to "Static Web Apps" and right-click on it.
+   - Select "Create Static Web App (Advanced)"
+   - Select the Azure resource group that you created earlier.
+   - Enter the name of the new static web app, which will be created in Azure.
+   - For the tier selected "Free (Personal/Hobbyists)
+   - Select type "React"
+   - Enter for the directory structure:
+      ```
+      frontend  (React root)
+      backend\azure-functions  (function root)
+      dist (the name of the build output folder under frontend)
+      ```
+
+3. Fix the YAML and deploy again
+   - Unfortunately, the backspace fails but cannot be avoided in the initial config.
+   - Change `backend\azure-functions` to `backend/azure-functions` and try again.
+
+## Final configuration on the Static Web App
+1. Browse to Static Web App in the portal.
+2. Select your website that was created.
+3. Browse to Settings | Environment Variables
+4. Add the following. 
+   - AZURE_CLIENT_ID   (a.k.a Application ID or Client ID)
+   - AZURE_CLIENT_SECRET
+   - AZURE_TENANT_ID 
+   - KeyVaultName
+
+   > Note these are the same environment variables you added before, with the addition of KeyVaultName.
+
+
 
 # Original Readme for Vite Template
 
