@@ -1,5 +1,7 @@
 # Overview
 
+This project started as a project for me to learn React / Typescript, while providing a portfolio website for my son as well. During an interview, I was asked if I had ever used Azure functions.  At the time, I had not. Then, over the next 4 days, I realized that Azure Functions are the way to go for static web applications hosted in Azure, at least for the free tier.
+
 - Frontend: React + TypeScript (vite)
 - Backend/API: Azure functions + C#
 - Hosted in Azure: Static Web APP
@@ -164,14 +166,17 @@ Now you can publish the initial setup. This implies that the code is already che
 1. Browse to Static Web App in the portal.
 2. Select your website that was created.
 3. Browse to Settings | Environment Variables
-4. Add the following. 
-   - AZURE_CLIENT_ID   (a.k.a Application ID or Client ID)
-   - AZURE_CLIENT_SECRET
-   - AZURE_TENANT_ID 
-   - KeyVaultName
+   -  Add the following. 
+      - AZURE_CLIENT_ID   (a.k.a Application ID or Client ID)
+      - AZURE_CLIENT_SECRET
+      - AZURE_TENANT_ID 
+      - KeyVaultName
 
    > Note these are the same environment variables you added before, with the addition of KeyVaultName.
 
+5. Save the settings, and Launch the website from the Overview page. It should now work.
+
+6. From the overview, choose "Add Custom Domain"
 
 
 # Original Readme for Vite Template
