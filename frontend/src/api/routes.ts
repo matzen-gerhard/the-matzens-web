@@ -16,3 +16,20 @@ export class ApiService {
         return res.json();
     }
 }
+
+/*
+    IN DEVELOPMENT:
+    .env file (frontend)  <---MUST MATCH---> local.settings.json (Azure Functions backend)
+    
+    IN PROEUCTION:
+    API_URL will be and empty string.
+    
+    /api/* will be proxied to the Azure funciton backend. 
+
+    Example of Azure Function:
+    [Function("videos")]
+    public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+
+    Then the route will be accessable via:
+    https://<your-static-web-app>.azurestaticapps.net/api/videos
+*/

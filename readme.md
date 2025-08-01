@@ -28,9 +28,11 @@ Pushing to GitHub triggers build action and deployment to Azure.
 ## Run Locally (Frontend)
 
 Visual Studio Code
+```
 cd frontend
 set-executionpolicy -scope process bypass
 npm run dev
+```
 
 This starts a server with origin `http://localhost:5173/`
 
@@ -44,7 +46,8 @@ This starts a server with origin `http://localhost:4173/`
 
 ## Run Locally (Backend)
 
-Visual Studio
+1. Start Visual Studio
+2. Run azure function project
 
 ## Helpful Powershell Commands
 
