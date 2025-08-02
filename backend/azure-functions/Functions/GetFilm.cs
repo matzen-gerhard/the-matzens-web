@@ -30,7 +30,7 @@ public class GetFilm
             return new BadRequestObjectResult("Blob name is required");
         }
 
-        var decodedBlobName = Uri.UnescapeDataString(blobName);
+        var decodedBlobName = $"films/{Uri.UnescapeDataString(blobName)}"; // Decode and add back "films/" prefix.
         var blobExists = await _blobHelper.BlobExistsAsync(decodedBlobName);
         if (!blobExists)
         {

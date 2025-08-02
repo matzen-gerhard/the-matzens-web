@@ -69,7 +69,14 @@ public class BlobHelper : IBlobHelper
             filmInfo.Title ??= nameWithoutExt;
         }
 
-        return [.. filmMap.Values.Where(f => f.Media != null)];
+        return [.. filmMap.Values
+                   .Where(f => f.Media != null)
+                   .Select(f => new FilmInfo
+                   {
+                       Title = f.Title,
+                       Media = Path.GetFileName(f.Media!), // strips "films/"
+                       Html = f.Html != null ? Path.GetFileName(f.Html) : null
+                   })];
     }
 
     public async Task<bool> BlobExistsAsync(string blobName)
