@@ -1,5 +1,6 @@
 ﻿using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Azure.Storage.Sas;
 using azure_functions.Shared.Models;
 using Microsoft.Extensions.Logging;
@@ -66,11 +67,19 @@ public class BlobHelper : IBlobHelper
                 filmInfo.Title = title;
             }
 
+            if (props.Value.Metadata.TryGetValue("Order", out var orderString) && 
+                int.TryParse(orderString, out var order))
+            {
+                filmInfo.Order = order;
+            }
+
+            filmInfo.Order ??= int.MaxValue;
             filmInfo.Title ??= nameWithoutExt;
         }
 
         return [.. filmMap.Values
                    .Where(f => f.Media != null)
+                   .OrderBy(f => f.Order)
                    .Select(f => new FilmInfo
                    {
                        Title = f.Title,
@@ -90,9 +99,16 @@ public class BlobHelper : IBlobHelper
     {
         ArgumentNullException.ThrowIfNull(mediaBlob);
 
-        var containerClient = await _lazyContainerClient.Value;
+        var baseName = Path.GetFileNameWithoutExtension(mediaBlob); // e.g., movie1 instad of movie1.mp4
 
-        var baseName = Path.GetFileNameWithoutExtension(mediaBlob); // e.g., movie1
+        var title = baseName;
+        var containerClient = await _lazyContainerClient.Value;
+        var mediaBlobClient = containerClient.GetBlobClient(mediaBlob);
+        var props = await mediaBlobClient.GetPropertiesAsync();
+        if (props.Value.Metadata.TryGetValue("Title", out var tempTitle))
+        {
+            title = tempTitle;
+        }
 
         var htmlBlob = $"films/{baseName}.htm";
 
@@ -108,7 +124,7 @@ public class BlobHelper : IBlobHelper
 
         return new FilmDetail
         {
-            Title = baseName,
+            Title = title,
             MediaUrl = mediaUrl,
             HtmlUrl = htmlUrl
         };

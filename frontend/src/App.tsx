@@ -3,6 +3,7 @@ import { ApiService } from "./api/routes";
 import "./App.css";
 import { ContentPanel } from "./components/ContentPanel";
 import type { FilmMetadata } from "./api/types";
+import type { FilmDetail } from "./api/types";
 
 function App() {
   const [films, setFilms] = useState<FilmMetadata[]>([]);
@@ -11,7 +12,7 @@ function App() {
   const [selectedFilm, setSelectedFilm] = useState<FilmMetadata | null>(null);
   const [selectedStory, setSelectedStory] = useState<string | null>(null);
   // Store film detail so we can use it in the sidebar (for iframe)
-  const [filmDetail, setFilmDetail] = useState<{ htmlUrl?: string } | null>(null);
+  const [filmDetail, setFilmDetail] = useState<FilmDetail | null>(null);
 
   // Fetch content lists on mount
   useEffect(() => {
@@ -60,24 +61,21 @@ function App() {
 
         <aside className="sidebar">
           <div className="shared-panel">
-            <h3>{activeSection === "films" ? "Films" : "Stories"}</h3>
-            <ul>
+            <h2>{activeSection === "films" ? "Films" : "Stories"}</h2>
+            <div className="sidebar-items">
               {activeSection === "films"
                 ? films.map((film) => (
-                  <li key={film.media}>
-                    <button onClick={() => setSelectedFilm(film)}>{film.title}</button>
-                  </li>
+                  <button onClick={() => setSelectedFilm(film)}>{film.title}</button>
                 ))
                 : stories.map((story) => (
-                  <li key={story}>
-                    <button onClick={() => setSelectedStory(story)}>{story}</button>
-                  </li>
+                  <button onClick={() => setSelectedStory(story)}>{story}</button>
                 ))}
-            </ul>
+            </div>
           </div>
 
           {activeSection === "films" && filmDetail?.htmlUrl && (
             <div className="shared-panel" style={{ marginTop: "12px" }}>
+              <h2>{filmDetail.title}</h2>
               <iframe
                 src={filmDetail.htmlUrl}
                 width="100%"
@@ -87,6 +85,7 @@ function App() {
               ></iframe>
             </div>
           )}
+
         </aside>
 
       </main>
