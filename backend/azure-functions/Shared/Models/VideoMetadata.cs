@@ -1,4 +1,4 @@
-﻿namespace azure_functions.Shared
+﻿namespace azure_functions.Shared.Models
 {
     public class VideoMetadata
     {

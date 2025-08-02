@@ -7,6 +7,22 @@ export class ApiService {
         this.apiUrl = API_URL ?? ""
     }
 
+    async getContent() {
+        const res = await fetch(`${this.apiUrl}/api/content`);
+        if (!res.ok) {
+            throw new Error("Failed to fetch content");
+        }
+        return res.json();
+    }
+
+    async getFilm(media: string) {
+        const res = await fetch(`${this.apiUrl}/api/film/${encodeURIComponent(media)}`);
+        if (!res.ok) {
+            throw new Error("Failed to fetch film metadata");
+        }
+        return res.json();
+    }
+
     async getVideos() {
         const res = await fetch(`${this.apiUrl}/api/videos`);
         if (!res.ok) {

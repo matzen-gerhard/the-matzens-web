@@ -1,4 +1,5 @@
 using azure_functions.Shared;
+using azure_functions.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
@@ -15,6 +16,7 @@ public class GetVideos
     {
         ArgumentNullException.ThrowIfNull(blobHelper);
         ArgumentNullException.ThrowIfNull(logger);
+
         _blobHelper = blobHelper;
         _logger = logger;
     }
