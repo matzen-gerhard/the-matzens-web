@@ -21,6 +21,14 @@ function App() {
         const data = await apiService.getContent();
         setFilms(data.films || []);
         setStories(data.stories || []);
+
+        if (data.films?.length) {
+          setSelectedFilm(data.films[0]);
+        }
+        if (data.stories?.length) {
+          setSelectedStory(data.stories[0]);
+        }
+
       } catch (err) {
         console.error("Failed to load content", err);
       }
@@ -32,12 +40,12 @@ function App() {
   return (
     <>
 
-      <header className="top-bar">
+      <header className="shared-panel top-bar">
         <nav className="nav-links">
           <button onClick={() => setActiveSection("films")}>Films</button>
           <button onClick={() => setActiveSection("stories")}>Stories</button>
         </nav>
-        <h1 className="site-title">Griffin's Portfolio</h1>
+        <h1 className="site-title">GK Studios</h1>
       </header>
 
       <main className="main-layout">
@@ -51,31 +59,36 @@ function App() {
         </section>
 
         <aside className="sidebar">
-          <h3>{activeSection === "films" ? "Films" : "Stories"}</h3>
-          <ul>
-            {activeSection === "films"
-              ? films.map((film) => (
-                <li key={film.media}>
-                  <button onClick={() => setSelectedFilm(film)}>{film.title}</button>
-                </li>
-              ))
-              : stories.map((story) => (
-                <li key={story}>
-                  <button onClick={() => setSelectedStory(story)}>{story}</button>
-                </li>
-              ))}
-          </ul>
+          <div className="shared-panel">
+            <h3>{activeSection === "films" ? "Films" : "Stories"}</h3>
+            <ul>
+              {activeSection === "films"
+                ? films.map((film) => (
+                  <li key={film.media}>
+                    <button onClick={() => setSelectedFilm(film)}>{film.title}</button>
+                  </li>
+                ))
+                : stories.map((story) => (
+                  <li key={story}>
+                    <button onClick={() => setSelectedStory(story)}>{story}</button>
+                  </li>
+                ))}
+            </ul>
+          </div>
 
           {activeSection === "films" && filmDetail?.htmlUrl && (
-            <iframe
-              src={filmDetail.htmlUrl}
-              width="100%"
-              height="300"
-              style={{ border: "none", marginTop: "12px" }}
-              title="Film Info"
-            ></iframe>
+            <div className="shared-panel" style={{ marginTop: "12px" }}>
+              <iframe
+                src={filmDetail.htmlUrl}
+                width="100%"
+                height="300"
+                style={{ border: "none" }}
+                title="Film Info"
+              ></iframe>
+            </div>
           )}
         </aside>
+
       </main>
     </>
   );
