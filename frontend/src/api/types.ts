@@ -1,9 +1,3 @@
-export interface VideoMetadata {
-    title: string;
-    blobName: string;
-    downloadUri: string;
-}
-
 export interface FilmMetadata {
     title: string;
     media: string;

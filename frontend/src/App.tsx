@@ -53,19 +53,19 @@ function App() {
       <main className="main-layout">
         {activeSection === "home" && (
           <div className="home-content">
-            <section className="parallax" style={{ backgroundImage: 'url("/images/film1.jpg")' }}>
+            <section className="parallax" style={{ backgroundImage: 'url("/gk-with-border.svg")' }}>
               <h1>Welcome to GK Studios</h1>
             </section>
             <div className="parallax-content">
               <h2>Explore our collection of films and stories</h2>
               <p>Discover short films, behind-the-scenes stories, and more.</p>
             </div>
-            <section className="parallax" style={{ backgroundImage: 'url("/images/film2.jpg")' }}>
-              <h1>Cinematic Stories</h1>
+            <section className="parallax" style={{ backgroundImage: 'url("/Epic-Adventures.jpg")' }}>
+              <h1>Epic Adventures</h1>
             </section>
             <div className="parallax-content">
-              <h2>Experience the magic of storytelling</h2>
-              <p>Browse a curated collection of silent films and modern shorts.</p>
+              <h2>An epic backpacking trip</h2>
+              <p>Earlier this summer, I went on a 28-mile backpacking trip from Mission Peak to Lake Del Valle.</p>
             </div>
           </div>
         )}

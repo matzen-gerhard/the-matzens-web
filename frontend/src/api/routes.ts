@@ -22,15 +22,6 @@ export class ApiService {
         }
         return res.json();
     }
-
-    async getVideos() {
-        const res = await fetch(`${this.apiUrl}/api/videos`);
-        if (!res.ok) {
-            throw new Error("Failed to fetch videos");
-        }
-
-        return res.json();
-    }
 }
 
 /*

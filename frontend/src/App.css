@@ -23,12 +23,15 @@ h6 {
   margin: 0;
 }
 
+h1 {
+  font-size: 1.5rem;
+}
+
 h2 {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .site-title {
-  font-size: 1.5rem;
   margin: 0;
 }
 
@@ -44,10 +47,11 @@ h2 {
 }
 
 .shared-panel {
-  background-color: wheat;
+  background-color: lightgray;
   color: black;
   border-radius: 12px;
   padding: 8px 16px;
+  margin-right: 16px;
 }
 
 button {
@@ -82,7 +86,7 @@ button:hover {
 }
 
 .sidebar {
-  width: 300px;
+  width: 380px;
   display: flex;
   flex-direction: column;
 }
@@ -112,8 +116,13 @@ button:hover {
 }
 
 .parallax h1 {
-  font-size: 3rem;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+  font-size: 6rem;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 2);
+  text-align: center;
+}
+
+.parallax-content h2 {
+  font-size: 4rem;
   text-align: center;
 }
 
@@ -124,6 +133,7 @@ button:hover {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: #f4f4f4;
+  background-color: lightgray;
   padding: 2rem;
+  color: black;
 }
