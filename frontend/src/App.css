@@ -83,6 +83,7 @@
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 16px;
     margin: 16px;
+    align-items: start;
   }
 
   .stories-list {
@@ -138,6 +139,7 @@
   }
 
   .description {
+    margin-top: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -158,10 +160,14 @@
     max-height: 4.5em;
   }
 
+  .description-text p:first-child {
+    margin-top: 0;
+  }
+
   .description.expanded .description-text {
     display: block;
     /* expanded height */
-    max-height: 400px;
+    max-height: 500px;
     overflow-y: auto;
   }
 
