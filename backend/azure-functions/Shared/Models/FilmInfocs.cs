@@ -4,7 +4,7 @@
     {
         public string? Title { get; set; }
         public int? Order { get; set; }
-        public string? Media { get; set; } // Blob name for media file
-        public string? Html { get; set; }  // Blob name for HTML file (optional)
+        public Uri? Media { get; set; } 
+        public string? Html { get; set; }  
     }
 }

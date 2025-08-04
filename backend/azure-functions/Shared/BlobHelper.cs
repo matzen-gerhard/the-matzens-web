@@ -1,7 +1,6 @@
 ﻿using Azure.Storage;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Azure.Storage.Sas;
 using azure_functions.Shared.Models;
 using Microsoft.Extensions.Logging;
 
@@ -29,17 +28,11 @@ public class BlobHelper : IBlobHelper
         });
     }
 
-    public async Task<Uri> GetDownloadUriAsync(string blobName)
-    {
-        var containerClient = await _lazyContainerClient.Value;
-        var blobClient = containerClient.GetBlobClient(blobName);
-        return blobClient.GenerateSasUri(BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(TokenTimeoutMinutes));
-    }
-
     public async Task<List<FilmInfo>> GetFilmsAsync()
     {
         var containerClient = await _lazyContainerClient.Value;
         var filmMap = new Dictionary<string, FilmInfo>();
+
 
         await foreach (var blobItem in containerClient.GetBlobsAsync(prefix: "films/"))
         {
@@ -53,24 +46,24 @@ public class BlobHelper : IBlobHelper
 
             if (blobItem.Name.EndsWith(".htm", StringComparison.OrdinalIgnoreCase))
             {
-                filmInfo.Html = blobItem.Name;
+                var html = await GetHtmlBlobAsync(blobItem.Name);
+                filmInfo.Html = html;
             }
             else
             {
-                filmInfo.Media = blobItem.Name; // assume any non-htm is media
-            }
+                // Assume any non-htm is media
+                var (uri, props) = await GetMediaBlobAsync(blobItem.Name);
+                filmInfo.Media = uri;
+                if (props.Metadata.TryGetValue("Title", out var title))
+                {
+                    filmInfo.Title = title;
+                }
 
-            var blobClient = containerClient.GetBlobClient(blobItem.Name);
-            var props = await blobClient.GetPropertiesAsync();
-            if (props.Value.Metadata.TryGetValue("Title", out var title))
-            {
-                filmInfo.Title = title;
-            }
-
-            if (props.Value.Metadata.TryGetValue("Order", out var orderString) && 
-                int.TryParse(orderString, out var order))
-            {
-                filmInfo.Order = order;
+                if (props.Metadata.TryGetValue("Order", out var orderString) &&
+                    int.TryParse(orderString, out var order))
+                {
+                    filmInfo.Order = order;
+                }
             }
 
             filmInfo.Order ??= int.MaxValue;
@@ -79,54 +72,26 @@ public class BlobHelper : IBlobHelper
 
         return [.. filmMap.Values
                    .Where(f => f.Media != null)
-                   .OrderBy(f => f.Order)
-                   .Select(f => new FilmInfo
-                   {
-                       Title = f.Title,
-                       Media = Path.GetFileName(f.Media!), // strips "films/"
-                       Html = f.Html != null ? Path.GetFileName(f.Html) : null
-                   })];
-    }
+                   .OrderBy(f => f.Order)];
 
-    public async Task<bool> BlobExistsAsync(string blobName)
-    {
-        var containerClient = await _lazyContainerClient.Value;
-        var blobClient = containerClient.GetBlobClient(blobName);
-        return await blobClient.ExistsAsync();
-    }
-
-    public async Task<FilmDetail> GetFilmDetailAsync(string mediaBlob)
-    {
-        ArgumentNullException.ThrowIfNull(mediaBlob);
-
-        var baseName = Path.GetFileNameWithoutExtension(mediaBlob); // e.g., movie1 instad of movie1.mp4
-
-        var title = baseName;
-        var containerClient = await _lazyContainerClient.Value;
-        var mediaBlobClient = containerClient.GetBlobClient(mediaBlob);
-        var props = await mediaBlobClient.GetPropertiesAsync();
-        if (props.Value.Metadata.TryGetValue("Title", out var tempTitle))
+        // Local function
+        async Task<(Uri Uri, BlobProperties Properties)> GetMediaBlobAsync(string blobName)
         {
-            title = tempTitle;
+            var client = GetBlobClient(blobName);
+            var props = await client.GetPropertiesAsync();
+            return (client.Uri, props.Value);
         }
 
-        var htmlBlob = $"films/{baseName}.htm";
-
-        // Generate SAS for media
-        var mediaUrl = await GetDownloadUriAsync(mediaBlob);
-
-        // Check for HTML file
-        Uri? htmlUrl = null;
-        if (await BlobExistsAsync(htmlBlob))
+        async Task<string> GetHtmlBlobAsync(string blobName)
         {
-            htmlUrl = await GetDownloadUriAsync(htmlBlob);
+            var client = GetBlobClient(blobName);
+            var response = await client.DownloadContentAsync();
+            return response.Value.Content.ToString();
         }
 
-        return new FilmDetail
+        BlobClient GetBlobClient(string blobName)
         {
-            Title = title,
-            MediaUrl = mediaUrl,
-            HtmlUrl = htmlUrl
-        };
+            return containerClient.GetBlobClient(blobName);
+        }
     }
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ApiService } from "../api/routes";
 import type { FilmMetadata } from "../api/types";
-import type { FilmDetail } from "../api/types";
 
 interface Props {
     activeSection: "films" | "stories";

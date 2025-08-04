@@ -4,8 +4,12 @@ export interface FilmMetadata {
     html: string;
 }
 
-export interface FilmDetail {
+export interface StoryMetadata {
     title: string;
-    mediaUrl: string;
-    htmlUrl?: string;
+    chapters: ChapterMetadata[];
+}
+
+export interface ChapterMetadata {
+    title: string;
+    docId: string;
 }
