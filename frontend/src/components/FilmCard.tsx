@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import DOMPurify from "dompurify";
-import type { FilmMetadata } from "./api/types";
+import type { FilmMetadata } from "../api/types";
 
 interface FilmCardProps {
     film: FilmMetadata;
