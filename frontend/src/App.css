@@ -229,6 +229,38 @@
     text-align: center;
   }
 
+  /* For tablets */
+  @media (max-width: 768px) {
+    .parallax h1 {
+      font-size: 4rem;
+    }
+
+    .parallax-content h2 {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* For phone screens (e.g., <= 480px wide) */
+  @media (max-width: 480px) {
+    .parallax h1 {
+      font-size: 3rem;
+      /* scale down */
+    }
+
+    .parallax-content h2 {
+      font-size: 2rem;
+      /* scale down */
+    }
+  }
+
+  .parallax.gkimage {
+    background-image: url("/gk-with-border.svg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: black;
+  }
+
   .parallax-content {
     height: 100vh;
     display: flex;

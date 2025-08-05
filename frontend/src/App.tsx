@@ -39,7 +39,7 @@ function App() {
       <main className="main-layout">
         {activeSection === "home" && (
           <div className="home-content">
-            <section className="parallax" style={{ backgroundImage: 'url("/gk-with-border.svg")' }}>
+            <section className="parallax gkimage">
               <div className="overlay"></div>
               <h1 className="overlay-text">Welcome to GK Studios</h1>
             </section>
