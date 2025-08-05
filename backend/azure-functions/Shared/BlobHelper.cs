@@ -94,4 +94,91 @@ public class BlobHelper : IBlobHelper
             return containerClient.GetBlobClient(blobName);
         }
     }
+
+    public async Task<List<StoryInfo>> GetStoriesAsync()
+    {
+        var containerClient = await _lazyContainerClient.Value;
+        var storyMap = new Dictionary<string, StoryInfo>();
+
+        // Blob names are of the form:
+        // stories/SpiritNight/SpiritNight.htm
+        // stories/SpiritNight/SpiritNight.jpg
+        // stories/SpiritNight/Chapters/MovingDay.html
+        await foreach (var blobItem in containerClient.GetBlobsAsync(prefix: "stories/"))
+        {
+            var parts = blobItem.Name.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length < 3) continue; // Should not happen because of filter on "stories/".
+
+            var storyFolder = parts[1]; // e.g., stories/SpiritNight/SpiritNight.htm -> "SpiritNight"
+            if (!storyMap.TryGetValue(storyFolder, out var storyInfo))
+            {
+                storyInfo = new StoryInfo();
+                storyMap[storyFolder] = storyInfo;
+            }
+
+            if (parts.Length == 3) // Items in story folder
+            {
+                if (blobItem.Name.EndsWith(".htm", StringComparison.OrdinalIgnoreCase))
+                {
+                    storyInfo.Html = await GetHtmlBlobAsync(blobItem.Name);
+                }
+                else if (blobItem.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+                {
+                    var (uri, props) = await GetMediaBlobAsync(blobItem.Name);
+                    storyInfo.CoverImage = uri;
+                    if (props.Metadata.TryGetValue("Title", out var title))
+                    {
+                        storyInfo.Title = title;
+                    }
+
+                    if (props.Metadata.TryGetValue("Order", out var orderString) &&
+                        int.TryParse(orderString, out var order))
+                    {
+                        storyInfo.Order = order;
+                    }
+                }
+            }
+            else if (parts.Length > 3 && parts[2].Equals("Chapters", StringComparison.OrdinalIgnoreCase))
+            {
+                // e.g., stories/SpiritNight/Chapters/Chapter1.htm
+                if (blobItem.Name.EndsWith(".htm", StringComparison.OrdinalIgnoreCase) || 
+                    blobItem.Name.EndsWith(".html", StringComparison.OrdinalIgnoreCase))
+                {
+                    var chapterTitle = Path.GetFileNameWithoutExtension(blobItem.Name);
+                    var blobClient = containerClient.GetBlobClient(blobItem.Name);
+                    storyInfo.Chapters.Add(new ChapterInfo
+                    {
+                        Title = chapterTitle,
+                        HtmlUri = blobClient.Uri,
+                    });
+                }
+            }
+
+            storyInfo.Order ??= int.MaxValue;
+            storyInfo.Title ??= storyFolder;
+        }
+
+        return [.. storyMap.Values
+            .Where(s => s.CoverImage != null && !string.IsNullOrEmpty(s.Html))
+            .OrderBy(s => s.Title)];
+
+        async Task<(Uri Uri, BlobProperties Properties)> GetMediaBlobAsync(string blobName)
+        {
+            var client = GetBlobClient(blobName);
+            var props = await client.GetPropertiesAsync();
+            return (client.Uri, props.Value);
+        }
+
+        async Task<string> GetHtmlBlobAsync(string blobName)
+        {
+            var client = GetBlobClient(blobName);
+            var response = await client.DownloadContentAsync();
+            return response.Value.Content.ToString();
+        }
+
+        BlobClient GetBlobClient(string blobName)
+        {
+            return containerClient.GetBlobClient(blobName);
+        }
+    }
 }

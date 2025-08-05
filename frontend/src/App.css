@@ -78,7 +78,8 @@
     flex-direction: column;
   }
 
-  .films-list {
+  .films-list,
+  .stories-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 16px;
@@ -86,11 +87,22 @@
     align-items: start;
   }
 
-  .stories-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
-    margin: 16px;
+  /* Tablet: cap at ~50% */
+  @media (min-width: 768px) {
+
+    .films-list,
+    .stories-list {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 0.5fr));
+    }
+  }
+
+  /* Desktop: cap at ~33% */
+  @media (min-width: 1200px) {
+
+    .films-list,
+    .stories-list {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 0.33fr));
+    }
   }
 
   .film-card,
@@ -122,10 +134,32 @@
     object-fit: cover;
   }
 
+  .image-container {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    /* desired card ratio */
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 0px;
+    background-color: lightgray;
+    /* filler color */
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* show whole image without cropping */
+  }
+
   .description {
     margin-top: 8px;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .description-header {
+    font-size: 1.5rem;
   }
 
   .description-text {

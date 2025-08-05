@@ -23,12 +23,13 @@ public class GetContent
     [Function("content")]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
     {
-        var films = await _blobHelper.GetFilmsAsync(); // Add a method to return the container
- 
+        var films = await _blobHelper.GetFilmsAsync();
+        var stories = await _blobHelper.GetStoriesAsync();
+
         var content = new
         {
             films,
-            stories = new List<string> { "Story1", "Story2" } // Placeholder for now
+            stories,
         };
 
         return new OkObjectResult(content);

@@ -6,10 +6,12 @@ export interface FilmMetadata {
 
 export interface StoryMetadata {
     title: string;
+    coverImage: string;
+    html: string;
     chapters: ChapterMetadata[];
 }
 
 export interface ChapterMetadata {
     title: string;
-    docId: string;
+    htmlUri: string;
 }

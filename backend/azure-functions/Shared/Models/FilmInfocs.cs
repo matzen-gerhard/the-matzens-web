@@ -5,6 +5,6 @@
         public string? Title { get; set; }
         public int? Order { get; set; }
         public Uri? Media { get; set; } 
-        public string? Html { get; set; }  
+        public string? Html { get; set; }  // HTML content (not URI)
     }
 }

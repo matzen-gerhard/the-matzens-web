@@ -3,6 +3,7 @@ import { ApiService } from "./api/routes";
 import "./App.css";
 import type { FilmMetadata, StoryMetadata } from "./api/types";
 import FilmCard from "./components/FilmCard";
+import StoryCard from "./components/StoryCard";
 
 function App() {
   const [films, setFilms] = useState<FilmMetadata[]>([]);
@@ -67,10 +68,11 @@ function App() {
         {activeSection === "stories" && (
           <div className="stories-list">
             {stories.map((story) => (
-              <div><h2>{story.title}</h2><p>Story content coming soon...</p></div>
+              <StoryCard key={story.title} story={story} />
             ))}
           </div>
         )}
+
       </main>
     </>
   );

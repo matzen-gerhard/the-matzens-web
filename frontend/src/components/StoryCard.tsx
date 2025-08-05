@@ -1,39 +1,41 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DOMPurify from "dompurify";
-import type { FilmMetadata } from "../api/types";
+import type { StoryMetadata } from "../api/types";
 
-interface FilmCardProps {
-    film: FilmMetadata;
+interface StoryCardProps {
+    story: StoryMetadata;
 }
 
-export default function FilmCard({ film }: FilmCardProps) {
+export default function StoryCard({ story }: StoryCardProps) {
     const [expanded, setExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const textRef = useRef<HTMLDivElement | null>(null);
 
-    const sanitizedHtml = DOMPurify.sanitize(film.html, {
+    // Sanitize HTML excerpt for safe rendering
+    const sanitizedHtml = DOMPurify.sanitize(story.html, {
         ALLOWED_TAGS: ["p", "strong", "em", "ul", "ol", "li", "br"],
         ALLOWED_ATTR: []
     });
 
     useEffect(() => {
-        const el = textRef.current;
-        if (el) {
-            setIsOverflowing(el.scrollHeight > el.clientHeight);
+        if (textRef.current) {
+            setIsOverflowing(textRef.current.scrollHeight > textRef.current.clientHeight);
         }
-    }, [film.html]);
+    }, [story.html]);
 
     return (
-        <div className="film-card">
-            <div className="video-container">
-                <video
-                    controls
-                    src={film.media}
-                    style={{ width: "100%", cursor: "pointer" }}
-                ></video>
+        <div className="story-card">
+            {/* Cover image with optional click to open details */}
+            <div className="image-container">
+                <img
+                    src={story.coverImage}
+                    alt={story.title}
+                    className="story-cover"
+                />
             </div>
+
             <div className={`description ${expanded ? "expanded" : ""}`}>
-                <h3 className="description-header">{film.title}</h3>
+                <h3 className="description-header">{story.title}</h3>
                 <div
                     ref={textRef}
                     className="description-text"
