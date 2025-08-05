@@ -31,18 +31,6 @@ export default function FilmCard({ film }: FilmCardProps) {
                     src={film.media}
                     style={{ width: "100%", cursor: "pointer" }}
                 ></video>
-                <button
-                    className="fullscreen-btn"
-                    onClick={() => {
-                        const video = document.querySelector(`video[src="${film.media}"]`);
-                        if (video && video.requestFullscreen) {
-                            (video as HTMLVideoElement).play();
-                            video.requestFullscreen();
-                        }
-                    }}
-                >
-                    ⛶
-                </button>
             </div>
             <div className={`description ${expanded ? "expanded" : ""}`}>
                 <h3>{film.title}</h3>
