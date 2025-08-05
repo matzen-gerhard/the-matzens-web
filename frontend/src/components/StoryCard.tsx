@@ -10,6 +10,7 @@ export default function StoryCard({ story }: StoryCardProps) {
     const [expanded, setExpanded] = useState(false);
     const [isOverflowing, setIsOverflowing] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
     const textRef = useRef<HTMLDivElement | null>(null);
 
     const sanitizedHtml = DOMPurify.sanitize(story.html, {
@@ -65,15 +66,33 @@ export default function StoryCard({ story }: StoryCardProps) {
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <button
-                            className="close-btn"
-                            onClick={() => setShowModal(false)}
-                        >
-                            ×
-                        </button>
+                        <div className="modal-header">
+                            {/* Dropdown for chapters */}
+                            <select
+                                className="chapter-select"
+                                value={currentChapterIndex}
+                                onChange={(e) => setCurrentChapterIndex(Number(e.target.value))}
+                            >
+                                {story.chapters.map((chapter, index) => (
+                                    <option key={chapter.title} value={index}>
+                                        {chapter.title}
+                                    </option>
+                                ))}
+                            </select>
+
+                            {/* Close button */}
+                            <button
+                                className="close-btn"
+                                onClick={() => setShowModal(false)}
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        {/* Chapter content */}
                         <iframe
-                            src={story.chapters[0].htmlUri}
-                            title={story.chapters[0].title}
+                            src={story.chapters[currentChapterIndex].htmlUri}
+                            title={story.chapters[currentChapterIndex].title}
                             className="chapter-frame"
                         ></iframe>
                     </div>

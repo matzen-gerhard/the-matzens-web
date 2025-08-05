@@ -124,18 +124,8 @@ public class BlobHelper : IBlobHelper
                 }
                 else if (blobItem.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
                 {
-                    var (uri, props) = await GetMediaBlobAsync(blobItem.Name);
-                    storyInfo.CoverImage = uri;
-                    if (props.Metadata.TryGetValue("Title", out var title))
-                    {
-                        storyInfo.Title = title;
-                    }
-
-                    if (props.Metadata.TryGetValue("Order", out var orderString) &&
-                        int.TryParse(orderString, out var order))
-                    {
-                        storyInfo.Order = order;
-                    }
+                    (storyInfo.CoverImage, storyInfo.Title, storyInfo.Order) = 
+                        await GetMediaBlobAsync(blobItem.Name, defaultTitle: storyFolder);
                 }
             }
             else if (parts.Length > 3 && parts[2].Equals("Chapters", StringComparison.OrdinalIgnoreCase))
@@ -144,29 +134,47 @@ public class BlobHelper : IBlobHelper
                 if (blobItem.Name.EndsWith(".htm", StringComparison.OrdinalIgnoreCase) || 
                     blobItem.Name.EndsWith(".html", StringComparison.OrdinalIgnoreCase))
                 {
-                    var chapterTitle = Path.GetFileNameWithoutExtension(blobItem.Name);
-                    var blobClient = containerClient.GetBlobClient(blobItem.Name);
+                    var defaultTitle = Path.GetFileNameWithoutExtension(blobItem.Name);
+                    var (uri, title, order) = await GetMediaBlobAsync(blobItem.Name, defaultTitle);
+
                     storyInfo.Chapters.Add(new ChapterInfo
                     {
-                        Title = chapterTitle,
-                        HtmlUri = blobClient.Uri,
+                        Title = title,
+                        HtmlUri = uri,
+                        Order = order
                     });
                 }
             }
+        }
 
-            storyInfo.Order ??= int.MaxValue;
-            storyInfo.Title ??= storyFolder;
+        foreach (var story in storyMap.Values)
+        {
+            // Sort chapters by order
+            story.Chapters = [.. story.Chapters.OrderBy(c => c.Order)];
         }
 
         return [.. storyMap.Values
             .Where(s => s.CoverImage != null && !string.IsNullOrEmpty(s.Html))
             .OrderBy(s => s.Title)];
 
-        async Task<(Uri Uri, BlobProperties Properties)> GetMediaBlobAsync(string blobName)
+        async Task<(Uri Uri, string Title, int Order)> GetMediaBlobAsync(string blobName, string defaultTitle)
         {
             var client = GetBlobClient(blobName);
-            var props = await client.GetPropertiesAsync();
-            return (client.Uri, props.Value);
+            var props = (await client.GetPropertiesAsync()).Value;
+            string title = defaultTitle;
+            if (props.Metadata.TryGetValue("Title", out var tempTitle))
+            {
+                title = tempTitle;
+            }
+
+            int order = int.MaxValue;
+            if (props.Metadata.TryGetValue("Order", out var orderString) &&
+                int.TryParse(orderString, out var tempOrder))
+            {
+                order = tempOrder;
+            }
+
+            return (client.Uri, title, order);
         }
 
         async Task<string> GetHtmlBlobAsync(string blobName)

@@ -2,6 +2,7 @@
 
 public class ChapterInfo
 {
-    public string? Title { get; set; }
-    public Uri? HtmlUri { get; set; } // Chapter HTML blob URI (not content)
+    public required string Title { get; set; }
+    public required Uri HtmlUri { get; set; } // Chapter HTML blob URI (not content)
+    public required int Order { get; set; }
 }
