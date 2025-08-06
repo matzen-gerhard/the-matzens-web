@@ -51,8 +51,8 @@ function App() {
               <h1>Epic Adventures</h1>
             </section>
             <div className="parallax-content">
-              <h2>An epic backpacking trip</h2>
-              <p>Earlier this summer, I went on a 28-mile backpacking trip from Mission Peak to Lake Del Valle.</p>
+              <h2>Contact Information</h2>
+              <p>cinemagkstudios@gmail.com</p>
             </div>
           </div>
         )}
