@@ -13,7 +13,7 @@
   }
 
   #root {
-    --header-height: 60px;
+    --header-height: 50px;
     max-width: 100vw;
     min-height: 100vh;
     display: flex;
