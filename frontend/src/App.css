@@ -286,6 +286,9 @@
     text-decoration: underline;
     font-size: 0.9rem;
     display: inline-block;
+    /* Force it above everything except the modal */
+    position: relative;
+    z-index: 10;
   }
 
   .story-iframe {
