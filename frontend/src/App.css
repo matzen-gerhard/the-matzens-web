@@ -275,9 +275,10 @@
   }
 
   .expand-btn {
-    padding-right: 64px;
-    padding-top: 8px;
+    padding-right: 16px;
+    padding-top: 16px;
     padding-bottom: 16px;
+    margin-top: -16px;
     background: none;
     border: none;
     color: blue;
