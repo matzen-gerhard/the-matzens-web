@@ -286,6 +286,9 @@
     text-decoration: underline;
     font-size: 0.9rem;
     display: inline-block;
+    /* Force it above everything */
+    position: relative;
+    z-index: 1000;
   }
 
   .story-iframe {
