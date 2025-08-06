@@ -26,7 +26,7 @@
   h4,
   h5,
   h6 {
-    font-family: 'Brush Script MT', cursive;
+    font-family: 'Brush Script MT', 'Dancing Script', cursive;
     margin: 0;
   }
 
@@ -325,7 +325,7 @@
   }
 
   .parallax.gkimage {
-    background-image: url("/gk-with-border.svg");
+    background-image: url("/gk-with-rectangle.svg");
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
