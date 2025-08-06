@@ -304,6 +304,15 @@
     color: white;
   }
 
+  /* Fix for iOS phones and small devices.
+     This means no parallax effect. */
+  @media (max-width: 768px) {
+    .parallax {
+      /* Prevent flicker glitches on iPhone (Android works fine). */
+      background-attachment: scroll;
+    }
+  }
+
   .parallax h1 {
     font-size: clamp(2rem, 8vw, 6rem);
     text-shadow: 0 3px 6px rgba(0, 0, 0, 2);
