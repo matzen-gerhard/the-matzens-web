@@ -13,7 +13,7 @@
   }
 
   #root {
-    --header-height: 50px;
+    --header-height: 52px;
     max-width: 100vw;
     min-height: 100vh;
     display: flex;
@@ -53,7 +53,6 @@
     align-items: center;
     background-color: lightgray;
     color: black;
-    border-radius: 12px;
     padding: 8px 16px;
   }
 
