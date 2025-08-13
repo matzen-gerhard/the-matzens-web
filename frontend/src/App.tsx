@@ -52,7 +52,7 @@ function App() {
             </section>
             <div className="parallax-content">
               <h2>Contact Information</h2>
-              <p>cinemagkstudios@gmail.com</p>
+              <p>ooo-cinemagkstudios@gmail.com</p>
             </div>
           </div>
         )}
