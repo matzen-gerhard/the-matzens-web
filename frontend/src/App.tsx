@@ -53,6 +53,11 @@ function App() {
             <div className="parallax-content">
               <h2>Contact Information</h2>
               <p>cinemagkstudios@gmail.com</p>
+              <h2>Site Alias</h2>
+              <div style={{ display: 'inline-block', background: '#fff', padding: 12 }}>
+                <img src="/qrcode.svg" alt="Website QR Code" width={288} height={288} />
+              </div>
+              <p>https://tinyurl.com/gkmat</p>
             </div>
           </div>
         )}
